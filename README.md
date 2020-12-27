@@ -1,3 +1,3 @@
 # breast_cancer
 
-This repo holds the processed data, modeling code, and figures for my thesis on ecological modeling of endocrine therapy resistance in breast cancer. It applies the logistic and Lotka-Volterra competition models of population growth from classic ecological theory (see e.g. the Gotelli _Primer of Ecology_).
+This repo holds the processed data, modeling code, and figures for my thesis on ecological modeling of endocrine therapy resistance in breast cancer. It applies the logistic and Lotka-Volterra competition models of population growth from classic ecological theory (see e.g. the Gotelli _Primer of Ecology_). The Stan code is deeply inspired by Bob Carpenter's [Lotka-Volterra case study on ODE's](https://mc-stan.org/users/documentation/case-studies/lotka-volterra-predator-prey.html#coding-the-model-stan-program) in Stan.
