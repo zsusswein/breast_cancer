@@ -4,6 +4,7 @@
 library(tidyverse)
 source('cycling_functions.R') # loads data and functions
 library(RColorBrewer)
+library(patchwork)
 
 ###############
 
