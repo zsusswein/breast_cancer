@@ -97,7 +97,7 @@ model {
   sigma ~ exponential(20);
   
   // interaction effect
-  theta[{1, 2}] ~ normal(0, .5);
+  theta[{1, 2}] ~ normal(0, 1);
   
   // growth rate -- from logistic
   r_s ~ normal(logistic_pars[1, 1], logistic_pars[2, 1]);

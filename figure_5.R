@@ -8,7 +8,7 @@ library(patchwork)
 
 ###############
 
-fit <- treat_cycle.rep(100, 20, 20, 20, c(1000, 1000), pars_treat, pars_veh)
+fit <- treat_cycle.rep(100, 100, 100, 5, c(1000, 1000), pars_treat, pars_veh)
 
 ###############
 
@@ -30,7 +30,7 @@ p1 <- ggplot(fit, aes(x = t, y = N, group = interaction(rep, pop), color = condi
         axis.title=element_text(size=20),
         legend.title=element_text(size = 20),
         strip.text.x = element_text(size = 15))+
-  ylim(0, 15000)
+  ylim(0, 16500)
 
 ###############
 # Refit assuming strong constant competition
@@ -44,7 +44,7 @@ pars_veh$beta.sd = .0001
 pars_veh$alpha.mean = 1
 pars_veh$alpha.sd = .0001
 
-fit <- treat_cycle.rep(100, 20, 20, 20, c(1000, 1000), pars_treat, pars_veh)
+fit <- treat_cycle.rep(100, 100, 100, 5, c(1000, 1000), pars_treat, pars_veh)
 
 ###########
 pal <- c(brewer.pal(9, 'Blues')[c(4, 8)], brewer.pal(9, 'Greens')[c(4, 8)])
@@ -60,7 +60,7 @@ p2 <- ggplot(fit, aes(x = t, y = N, group = interaction(rep, pop), color = condi
        tag = 'B')+
   theme(axis.text = element_text(size = 10),
         axis.title = element_text(size = 20))+
-  ylim(0, 15000)
+  ylim(0, 16500)
 
 ###########
 

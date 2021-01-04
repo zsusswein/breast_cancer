@@ -229,9 +229,7 @@ write_csv(summary(fit)$summary %>% as_tibble(rownames = 'par'), 'results/paramet
 
 # save interaction raw data
 fit %>% 
-  spread_draws(theta[i]) 
-
-%>% 
+  spread_draws(theta[i]) %>% 
   write_csv('results/parameters/LV_treatment.csv')
 
 # Save phase space draws
