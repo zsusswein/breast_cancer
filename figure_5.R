@@ -17,7 +17,7 @@ fit$condition <- ordered(fit$condition, c('LCC1, Vehicle','LCC1, Treatment', 'LC
 
 p1 <- ggplot(fit, aes(x = t, y = N, group = interaction(rep, pop), color = condition))+
   geom_line(alpha = .1)+
-  scale_color_manual(values = pal[c(1, 2, 3, 4)])+
+  scale_color_manual(values = pal[c(1, 3, 2, 4)])+
   theme_minimal()+
   labs(y = 'Cell count', 
        x = 'Time steps',
@@ -26,8 +26,8 @@ p1 <- ggplot(fit, aes(x = t, y = N, group = interaction(rep, pop), color = condi
   guides(colour = guide_legend(override.aes = list(alpha = 1)))+
   theme(legend.position = c(0.75, 0.15),
         legend.text=element_text(size=18),
-        axis.text=element_text(size=10),
-        axis.title=element_text(size=20),
+        axis.text=element_text(size=20),
+        axis.title=element_text(size=30),
         legend.title=element_text(size = 20),
         strip.text.x = element_text(size = 15))+
   ylim(0, 16500)
@@ -52,14 +52,14 @@ fit$condition <- ordered(fit$condition, c('LCC1, Vehicle','LCC1, Treatment', 'LC
 
 p2 <- ggplot(fit, aes(x = t, y = N, group = interaction(rep, pop), color = condition))+
   geom_line(alpha = .1, show.legend = F)+
-  scale_color_manual(values = pal[c(1, 2, 3, 4)])+
+  scale_color_manual(values = pal[c(1, 3, 2, 4)])+
   theme_minimal()+
   labs(y = '', 
        x = 'Time steps',
        color = 'Condition',
        tag = 'B')+
-  theme(axis.text = element_text(size = 10),
-        axis.title = element_text(size = 20))+
+  theme(axis.text = element_text(size = 20),
+        axis.title = element_text(size = 30))+
   ylim(0, 16500)
 
 ###########

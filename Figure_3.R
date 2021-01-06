@@ -55,18 +55,18 @@ p1 <- ggplot(df, aes(x = rank, group = condition))+
   geom_point(aes(y = agg_count, color = condition), size = 1.75)+
   geom_ribbon(aes(ymin = .lower, ymax = .upper, group = interaction(condition, .width), fill = condition), alpha = .35, show.legend = F)+
   theme_minimal()+
-  scale_color_manual(values = pal[c(1, 2, 3, 4)])+
-  scale_fill_manual(values = pal[c(1, 2, 3, 4)])+
-  labs(y = 'Mean cell count',
+  scale_color_manual(values = pal[c(1, 3, 2, 4)])+
+  scale_fill_manual(values = pal[c(1, 3, 2, 4)])+
+  labs(y = 'Cell count',
        x = 'Time steps',
        color = 'Condition',
        tag = 'A')+
-  theme(legend.position = c(0.2, 0.85),
+  theme(legend.position = c(0.2, 0.9),
         legend.text=element_text(size=18),
-        axis.text=element_text(size=10),
-        axis.title=element_text(size=20),
+        axis.text=element_text(size=20),
+        axis.title=element_text(size=30),
         legend.title=element_text(size = 20),
-        strip.text.x = element_text(size = 15))+
+        strip.text.x = element_text(size = 20))+
   facet_wrap(~treatment)
 
 #################
@@ -76,14 +76,20 @@ df.2$i <- ordered(df.2$i, c('Intrinsic growth rate (r)', 'Carrying capacity (K)'
 p2 <- ggplot(df.2, aes(x = theta, y = condition, fill = condition))+
   stat_halfeye(orientation = 'horizontal',
                show.legend = F,
-               normalize = 'xy')+
+               normalize = 'xy',
+               .width = c(.95, .5),
+               aes(fill_ramp = stat(cut_cdf_qi(cdf, 
+                                               .width = c(.5, .95, 1), 
+                                               labels = scales::percent_format(accuracy = 1)))))+
+  scale_fill_ramp_discrete(range = c(.9, .3), na.translate = F)+
   facet_wrap(~i, scales = 'free_x')+
   scale_y_discrete(limits = c('LCC9, Treatment','LCC9, Vehicle', 'LCC1, Treatment', 'LCC1, Vehicle'))+
   theme_minimal()+
   scale_fill_manual(values = pal[c(1, 2, 4, 3)])+
   labs(x = '', y = '', tag = 'B')+
-  theme(strip.text.x = element_text(size = 15),
-        axis.text.y = element_blank())
+  theme(strip.text.x = element_text(size = 20),
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(size = 20))
 
 
 
