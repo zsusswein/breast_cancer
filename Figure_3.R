@@ -85,7 +85,7 @@ p2 <- ggplot(df.2, aes(x = theta, y = condition, fill = condition))+
   facet_wrap(~i, scales = 'free_x')+
   scale_y_discrete(limits = c('LCC9, Treatment','LCC9, Vehicle', 'LCC1, Treatment', 'LCC1, Vehicle'))+
   theme_minimal()+
-  scale_fill_manual(values = pal[c(1, 2, 4, 3)])+
+  scale_fill_manual(values = pal[c(1, 3, 4, 2)])+
   labs(x = '', y = '', tag = 'B')+
   theme(strip.text.x = element_text(size = 20),
         axis.text.y = element_blank(),
