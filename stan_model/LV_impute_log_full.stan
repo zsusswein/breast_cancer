@@ -118,6 +118,9 @@ model {
         for (t in 1:N_obs){
         
           y_obs[t, pop, r] ~ lognormal(log(y_hat[t_obs[t], pop, r]), sigma); 
+          
+          
+          
     
         }
       }
