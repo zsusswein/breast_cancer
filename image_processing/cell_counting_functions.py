@@ -122,7 +122,7 @@ def clean_channel(image):
                 clean_red[x,y] = 0
                 clean_green[x,y] = 0
     
-    # threshold the red image with an ISODATA filter to remove noise
+    # threshold the red image with an gamma filter to remove noise
     clean_red = exposure.adjust_gamma(clean_red, gamma=1)
     clean_green = exposure.adjust_gamma(clean_green, gamma=1)
                 
