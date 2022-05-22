@@ -1,7 +1,7 @@
 # Generating cell counts from images
 
-This directory holds the code used in (Susswein et al., 
-2021)[https://www.biorxiv.org/content/10.1101/2022.02.18.481041v1] to process 
+This directory holds the code used in [Susswein et al., 
+2021](https://www.biorxiv.org/content/10.1101/2022.02.18.481041v1) to process 
 images of fluorescent cells and extract counts of each population. This 
 pipeline is optimized for cells fluorescing red and green, particularly with 
 the mCherry and egfp. This pipeline has been validated against these 
@@ -68,8 +68,8 @@ step. We finish this step by increasing the contrast with a power law
 correction with gamma set to 5.
 
 Third, and finally, we actually count the cells in the image using using the 
-(`skimage.feature.blob_log()` 
-function)[https://scikit-image.org/docs/stable/auto_examples/features_detection/plot_blob.html].  
+[`skimage.feature.blob_log()` 
+function](https://scikit-image.org/docs/stable/auto_examples/features_detection/plot_blob.html).  
 This function computes the Laplacian of the Gaussian objects by successively 
 computing the standard deviations of the identified objects until the radius 
 of the object is obtained. This function returns the position (x and 
