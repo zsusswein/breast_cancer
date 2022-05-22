@@ -5,7 +5,7 @@ This directory holds the code used in (Susswein et al.,
 images of fluorescent cells and extract counts of each population. This 
 pipeline is optimized for cells fluorescing red and green, particularly with 
 the mCherry and egfp. This pipeline has been validated against these 
-particular fluorescent markers and there are no guarantees it will perform as 
+particular fluorescent markers, but there are no guarantees it will perform as 
 well in other conditions (see the validation figure or the code to produce it 
 in the repository).
 
@@ -46,7 +46,7 @@ algorithm then linearly scales the pixels to be in [0, 1] using the
 the image to it with `gamma` set to 1. 
 
 
-# Cell counting
+### Cell counting
 
 The number of cells in a given color channel are counted by the `cell_count()` 
 function, with the red and green color channels counted separately (the blue 
