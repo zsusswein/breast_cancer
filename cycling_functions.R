@@ -240,4 +240,170 @@ treat_cycle.rep <- function(nrep, t_treat, t_veh, cycles, y0, pars_treat, pars_v
 
 ############
 
+treat_adaptive <- function(N_max, t_total, y0, pars_treat, pars_veh, chunk_size = 50){
+ # Function runs an adaptive therapy regime, switching to treatment
+ # the resistant population reachs an abundance of R_max
+  
+  # t_total must be divisible by chunk_size
+  stopifnot(t_total %% chunk_size == 0)
+  
+  ####
+  # instantiate vectors to hold pops
+  
+  S_pop <- vector(mode = 'double', length = t_total+1)
+  R_pop <- vector(mode = 'double', length = t_total+1)
+  
+  chunk_start = 1
+  chunk_end = chunk_start+(chunk_size-1)
+  
+  ####
+  # Solve ODE in chunks to check if the population has gone over the threshold
+  
+  while(chunk_start < t_total){
+    
+    if(chunk_start > 1){
+      
+      test <- (R_pop[chunk_start] + S_pop[chunk_start]) > N_max
+    }else{
+      
+      test <- TRUE
+    }
+    
+    if(test){
+      
+      treat_out <- ode(y0, chunk_start:chunk_end, LV, pars_treat)
+  
+    }else{
+      
+      treat_out <- ode(y0, chunk_start:chunk_end, LV, pars_veh)
+      
+    }
+  
+  S_pop[(chunk_start:chunk_end)] <- treat_out[,2]
+  R_pop[(chunk_start:chunk_end)] <- treat_out[,3]
+  
+  y0 <- c(S_pop[chunk_end], R_pop[chunk_end])
+  chunk_start = chunk_end
+  chunk_end = chunk_start+chunk_size
+  
+  }
+    
+  return(list(S = S_pop,
+                R = R_pop))
+}
+  
+############
+# Hacky utility function to determine if the population is vehicle or treated
+
+determine_treat <- function(p, N_max, chunk_size, t_total){
+  
+  chunk_start = 1
+  chunk_end = chunk_start+(chunk_size-1)
+  
+  condition <- vector(mode = 'character', length = t_total+1)
+  
+  ####
+  # Solve ODE in chunks to check if the population has gone over the threshold
+  
+  while(chunk_start < t_total){
+    
+    if(chunk_start > 1){
+      
+      test <- (p$S[chunk_start-1] + p$R[chunk_start-1]) > N_max
+    }else{
+      
+      test <- TRUE
+    }
+    
+    if(test){
+      
+      c <- 'TRT'
+      
+    }else{
+      
+      c <- 'VEH'
+      
+    }
+    
+    condition[(chunk_start:chunk_end)] <- c
+    chunk_start = chunk_end
+    chunk_end = chunk_start+chunk_size
+    
+    
+  }
+  
+  return(condition)
+
+}
+
+############
+
+treat_adaptive.rep <- function(nrep, t_total, N_max,chunk_size = 50, y0, pars_treat, pars_veh){
+  # Function runs treat_adaptive nrep times and stores results in a nrep x pop x time array
+  
+  ####
+  # pre-allocate array
+  pop <- tibble(S = numeric(),
+                R = numeric(),
+                t = numeric(), 
+                rep = numeric())
+  
+  ####
+  # generate random deviates
+  pars_veh_full <- matrix(data = c(rnorm(nrep, pars_veh[[1]], pars_veh[[2]]),
+                                   rnorm(nrep, pars_veh[[3]], pars_veh[[4]]),
+                                   rnorm(nrep, pars_veh[[5]], pars_veh[[6]]),
+                                   rnorm(nrep, pars_veh[[7]], pars_veh[[8]]),
+                                   rnorm(nrep, pars_veh[[9]], pars_veh[[10]]),
+                                   rnorm(nrep, pars_veh[[11]], pars_veh[[12]])),
+                          nrow = nrep,
+                          ncol = 6,
+                          byrow = F)
+  
+  
+  pars_treat_full <- matrix(data = c(rnorm(nrep, pars_treat[[1]], pars_treat[[2]]),
+                                     rnorm(nrep, pars_treat[[3]], pars_treat[[4]]),
+                                     rnorm(nrep, pars_treat[[5]], pars_treat[[6]]),
+                                     rnorm(nrep, pars_treat[[7]], pars_treat[[8]]),
+                                     rnorm(nrep, pars_treat[[9]], pars_treat[[10]]),
+                                     rnorm(nrep, pars_treat[[11]], pars_treat[[12]])),
+                            nrow = nrep,
+                            ncol = 6,
+                            byrow = F)
+  
+  ####
+  # simulate treatment cycles
+  
+  for (rep in 1:nrep){
+    
+    p <- treat_adaptive(N_max, t_total, y0, pars_treat_full[rep,], pars_veh_full[rep,], chunk_size)
+    
+    # Figure out if treatment or vehicle
+    
+    treatment <- determine_treat(p, N_max, chunk_size, t_total)
+    
+    p <- p %>% 
+      as_tibble() %>% 
+      mutate(rep = rep,
+             t = row_number(),
+             treatment = treatment)
+    
+    # infefficient hack but easier to use later w/ ggplot
+    pop <- suppressMessages(full_join(pop, p))
+  }
+  
+  # return array in long format
+  fit <- pop %>% 
+    pivot_longer(c(S, R), names_to = 'pop', values_to = 'N') %>% 
+    mutate(pop = if_else(pop == 'S', 'LCC1', 'LCC9')) %>% 
+    mutate(condition = paste(pop, treatment, sep = ', '))
+  
+  fit <- fit %>% 
+    filter(t <= t_total)
+  
+  
+  ####
+  return(fit)
+}
+
 
